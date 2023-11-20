@@ -13,7 +13,7 @@ class Item:
         :param price: Цена за единицу товара.
         :param quantity: Количество товара в магазине.
         """
-        self.name = name
+        self.__name = name
         self.price = price
         self.quantity = quantity
         self.all.append(self)
@@ -32,3 +32,44 @@ class Item:
         """
         self.price = int(self.pay_rate * self.price)
         return self.price
+
+    @property
+    def name(self):
+        return self.__name
+
+    @name.setter
+    def name(self, name):
+        self.__name = name
+        """Проверяет, что длина наименования товара не больше 10 символов."""
+        if len(self.__name) <= 10:
+            self.__name = name
+        elif len(self.__name) > 10:
+            self.__name = name[0:10]
+
+    @classmethod
+    def instantiate_from_csv(cls, path):
+        """
+        Класс-метод, который принимает путь к документу с значениями.
+        Открывает документ и преобразовывает его в словарь.
+        Инициализирует значения под атрибуты класса
+        """
+        import csv
+        cls.all.clear()
+        with open(path, 'r', newline='', encoding='cp1251') as attributes:
+            attribute = csv.DictReader(attributes)
+            for attr in attribute:
+                name = attr['name']
+                price = cls.string_to_number(attr['price'])
+                quantity = cls.string_to_number(attr['quantity'])
+                items_csv = Item(name, price, quantity)
+
+            return items_csv
+
+    @staticmethod
+    def string_to_number(string: str):
+        if string.isdigit:
+            if '.' in string:
+                string = int(float(string))
+            else:
+                string = int(string)
+            return string

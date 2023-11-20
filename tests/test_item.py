@@ -24,3 +24,17 @@ Item.pay_rate = 0.8
 
 def test_apply_discount(item_fortest):
     assert item_fortest.apply_discount() == 12000
+
+
+def test_name(item_fortest):
+    """ Тест на подсчёт длинны наименования """
+    assert len(item_fortest.name) <= 10
+    item_fortest.name = 'Холодильник'
+    assert len(item_fortest.name) == 10
+
+
+def test_instantiate_from_csv():
+    assert Item.instantiate_from_csv('../src/items.csv').name == "Клавиатура"
+    assert Item.instantiate_from_csv('../src/items.csv').price == 75
+    assert Item.instantiate_from_csv('../src/items.csv').quantity == 5
+
