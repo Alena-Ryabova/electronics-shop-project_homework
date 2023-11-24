@@ -15,6 +15,14 @@ def test_item_init(item_fortest):
     assert item_fortest.quantity == 15
 
 
+def test_repr(item_fortest):
+    assert repr(item_fortest) == "Item('Планшет', 15000, 15)"
+
+
+def test_str(item_fortest):
+    assert str(item_fortest) == 'Планшет'
+
+
 def test_calculate_total_price(item_fortest):
     assert item_fortest.calculate_total_price() == 225000
 
@@ -37,4 +45,3 @@ def test_instantiate_from_csv():
     assert Item.instantiate_from_csv('../src/items.csv').name == "Клавиатура"
     assert Item.instantiate_from_csv('../src/items.csv').price == 75
     assert Item.instantiate_from_csv('../src/items.csv').quantity == 5
-
