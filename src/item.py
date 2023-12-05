@@ -1,3 +1,14 @@
+import os.path
+
+
+class InstantiateCSVError(Exception):
+    def __init__(self):
+        self.error = 'Файл item.csv поврежден'
+
+    def __str__(self):
+        return self.error
+
+
 class Item:
     """
     Класс для представления товара в магазине.
@@ -60,8 +71,11 @@ class Item:
         Открывает документ и преобразовывает его в словарь.
         Инициализирует значения под атрибуты класса
         """
+        if not os.path.exists(path):
+            raise FileNotFoundError('Отсутствует файл item.csv')
         import csv
         cls.all.clear()
+        string_count = 0
         with open(path, 'r', newline='', encoding='cp1251') as attributes:
             attribute = csv.DictReader(attributes)
             for attr in attribute:
@@ -69,7 +83,9 @@ class Item:
                 price = cls.string_to_number(attr['price'])
                 quantity = cls.string_to_number(attr['quantity'])
                 items_csv = Item(name, price, quantity)
-
+                string_count += 1
+            if string_count < 5:
+                raise InstantiateCSVError
             return items_csv
 
     @staticmethod
@@ -85,5 +101,3 @@ class Item:
         if not isinstance(other, Item):
             raise ValueError('Складывать можно только объекты Item и дочерние от них.')
         return self.quantity + other.quantity
-
-
